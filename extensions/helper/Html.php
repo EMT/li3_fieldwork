@@ -1,6 +1,6 @@
 <?php
 
-namespace fieldwork\extensions\helper;
+namespace li3_fieldwork\extensions\helper;
 
 class Html extends \lithium\template\helper\Html {
 

@@ -1,8 +1,8 @@
 <?php
 
-namespace fieldwork\extensions\command;
+namespace li3_fieldwork\extensions\command;
 
-use fieldwork\extensions\data\Migrate as MigrateModel;
+use li3_fieldwork\extensions\data\Migrate as MigrateModel;
 use lithium\data\Connections;
 
 

@@ -4,8 +4,8 @@
  * Wrapper for using Access in Lithium views
  */
 
-namespace fieldwork\extensions\helper;
-use fieldwork\access\Access as FieldworkAccess;
+namespace li3_fieldwork\extensions\helper;
+use li3_fieldwork\access\Access as FieldworkAccess;
 
 
 class Access extends \lithium\template\Helper {

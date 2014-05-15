@@ -1,6 +1,6 @@
 <?php
 
-namespace fieldwork\messages;
+namespace li3_fieldwork\messages;
 
 use lithium\storage\Session;
 

@@ -1,7 +1,7 @@
 <?php
 
 
-namespace fieldwork\extensions\data;
+namespace li3_fieldwork\extensions\data;
 
 
 /*

@@ -6,7 +6,7 @@
  * Currently only implements Mandrill
  */
 
-namespace fieldwork\email;
+namespace li3_fieldwork\email;
 
 
 class Email {

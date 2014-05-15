@@ -1,11 +1,11 @@
 <?php
 
 /**
- * View helper for fieldwork/Messages
+ * View helper for li3_fieldwork/Messages
  */
 
-namespace fieldwork\extensions\helper;
-use fieldwork\messages\Messages as FieldworkMessages;
+namespace li3_fieldwork\extensions\helper;
+use li3_fieldwork\messages\Messages as FieldworkMessages;
 
 
 class Messages extends \lithium\template\Helper {

@@ -6,7 +6,7 @@
 *	Geocoding class for Google Geocoding API
 */
 
-namespace fieldwork\utils;
+namespace li3_fieldwork\utils;
 
 
 

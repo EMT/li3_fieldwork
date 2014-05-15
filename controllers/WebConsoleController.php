@@ -1,9 +1,9 @@
 <?php
 
 
-namespace fieldwork\controllers;
+namespace li3_fieldwork\controllers;
 
-use fieldwork\extensions\data\Migrate;
+use li3_fieldwork\extensions\data\Migrate;
 
 
 class WebConsoleController extends \lithium\action\Controller {

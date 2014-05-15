@@ -4,9 +4,9 @@
  * Access control library
 */
 
-namespace fieldwork\tests\cases\access;
+namespace li3_fieldwork\tests\cases\access;
 
-use \fieldwork\access\Access;
+use \li3_fieldwork\access\Access;
 
 
 class AccessTest extends \lithium\test\Unit {

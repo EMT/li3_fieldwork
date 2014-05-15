@@ -6,7 +6,7 @@
  */
 
 
-namespace fieldwork\utils;
+namespace li3_fieldwork\utils;
 
 
 class Encrypt {
