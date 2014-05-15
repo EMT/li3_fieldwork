@@ -1,6 +1,6 @@
 <?php
 
-namespace fieldwork\access;
+namespace li3_fieldwork\access;
 
 
 class Access {
