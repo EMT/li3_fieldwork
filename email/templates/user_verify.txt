@@ -1,0 +1,13 @@
+Hi {{fname}}, Please verify your email address
+
+Hi {{fname}},
+
+Welcome to Plan Do, the social action app!
+
+Please follow the link below to confirm your email address.
+
+<{{verify_link}}>
+
+Thanks
+
+The Plan Do Team

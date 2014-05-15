@@ -1,0 +1,15 @@
+{{fullname}} has invited you to join a project on Plan.Do
+
+Hi,
+
+{{fullname}} has invited you join them on the project: {{project_title}}.
+
+Follow the link below to get involved!
+
+<{{verify_link}}>
+
+Thanks
+
+The Plan Do Team
+
+
