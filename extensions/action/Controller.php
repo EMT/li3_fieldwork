@@ -9,6 +9,7 @@
 namespace li3_fieldwork\extensions\action;
 
 use lithium\core\Environment;
+use lithium\security\validation\RequestToken;
 
 
 class Controller extends \lithium\action\Controller {
