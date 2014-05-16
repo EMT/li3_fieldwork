@@ -3,6 +3,7 @@
 
 namespace li3_fieldwork\extensions\data;
 
+use li3_fieldwork\utils\Geocoder;
 
 /*
 use lithium\data\Connections;
@@ -64,6 +65,34 @@ class Model extends \lithium\data\Model {
     //         return $result;
     //     }
     // }
+    
+
+   /**
+    * Use the postcode property to find the lat and long coords
+    */
+    
+    public function geoLocate($entity, $key = 'postcode', $debug = false) {
+        if (!$entity->$key) {
+            throw new \Exception('No key `' . $key . '` for this entity.', 500);
+        }
+
+        $address = $entity->$key;
+        $geocoder = new Geocoder($address, 'uk');
+        $geometry = $geocoder->getGeometry();
+
+        if ($geometry) { 
+            $entity->latitude = $geometry->location->lat;
+            $entity->longitude = $geometry->location->lng;
+            $entity->geo_accuracy = $geometry->location_type;
+            return $entity;
+        }
+        
+        if ($debug) {
+            return $geocoder->getRaw();
+        }
+
+        return false;
+    }
     
 
 }

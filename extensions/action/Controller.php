@@ -87,12 +87,12 @@ class Controller extends \lithium\action\Controller {
                 'query' => $this->request->query,
                 'env' => Environment::get(),
                 'build' => Environment::get('build'),
-                'external_js' => (isset($this->external_js)) ? $this->external_js : array(),
+                'external_js' => (isset($this->external_js)) ? $this->external_js : [],
                 'auth' => $this->auth
             ));
 
-            if (!isset($options['data']['body_data'])) {
-                $options['data']['body_data'] = (isset($this->body_data)) ? $this->body_data : array();
+            if (!isset($options['data']['data_attrs'])) {
+                $options['data']['data_attrs'] = (isset($this->data_attrs)) ? $this->data_attrs : [];
             }
         }
         
