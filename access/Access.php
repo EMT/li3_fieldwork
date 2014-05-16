@@ -105,22 +105,31 @@ class Access {
 		else {
 			$authenticated = self::_defaultAuthenticatedCheck($user);
 		}
+
 		if ($authenticated) {
 			if (!$roles) {
 				return true;
 			}
+
 			if (!is_array($roles)) {
-				$roles = array($roles);
+				$roles = [$roles];
 			}
+
 			foreach ($roles as $role => $rsrc) {
 				if (is_int($role)) {
 					$role = $rsrc;
 				}
+
 				if ($rule = static::getRules($role)) {
+					if (!is_array($rule)) {
+						$rule = [$rule];
+					}
+
 					foreach ($rule as $rl => $conds) {
 						if ($conds === true && $user->{self::$_opts['role_key']} === $rl) {
 							return true;
 						}
+
 						if (is_array($conds)) {
 							$passed = true;
 							foreach ($conds as $user_field => $match) {
@@ -137,10 +146,12 @@ class Access {
 									break;
 								}
 							}
+
 							if ($passed) {
 								return true;
 							}
 						}
+
 						if (is_callable($conds)) {
 							if ($conds($user, $rsrc)) {
 								return true;
@@ -153,6 +164,7 @@ class Access {
 				}
 			}
 		}
+		
 		if ($behaviour) {
 			$status = ($authenticated) ? 'authenticated' : 'unauthenticated';
 			$b = false;
