@@ -88,7 +88,7 @@ class Controller extends \lithium\action\Controller {
                 'env' => Environment::get(),
                 'build' => Environment::get('build'),
                 'external_js' => (isset($this->external_js)) ? $this->external_js : [],
-                'auth' => $this->auth
+                'auth' => $this->request->auth
             ));
 
             if (!isset($options['data']['data_attrs'])) {
