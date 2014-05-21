@@ -90,10 +90,6 @@ class Controller extends \lithium\action\Controller {
                 'external_js' => (isset($this->external_js)) ? $this->external_js : [],
                 'auth' => $this->request->auth
             ));
-
-            if (!isset($options['data']['data_attrs'])) {
-                $options['data']['data_attrs'] = (isset($this->data_attrs)) ? $this->data_attrs : [];
-            }
         }
         
         parent::render($options);
