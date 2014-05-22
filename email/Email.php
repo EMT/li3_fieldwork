@@ -59,7 +59,6 @@ class Email {
 	
 	
 	public function sendTemplate($message, $template, $data) {
-var_dump($this->template_dir . $template . '.txt');
 		if (file_exists($this->template_dir . $template . '.txt')) {
 			$content = file_get_contents($this->template_dir . $template . '.txt');
 			if ($content) {
