@@ -21,7 +21,7 @@ class Html extends \lithium\template\helper\Html {
             if (is_array($val) || is_object($val)) {
                 $val = json_encode($val);
             }
-            $val = 'data-' . $key . '="' . $val . '"';
+            $val = 'data-' . $key . "='" . htmlspecialchars($val) . "'";
         }
 
         return implode(' ', $data);
