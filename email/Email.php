@@ -15,6 +15,7 @@ class Email {
 	protected $mandrill;
 	protected $from_email;
 	protected $from_name;
+	protected $template_dir;
 	protected $footer_template = 'footer';
 
 	protected static $_config;
@@ -31,8 +32,14 @@ class Email {
 		$this->mandrill = new \Mandrill($options['mandrill_api_key']);
 		$this->from_email = $options['from_email'];
 		$this->from_name = $options['from_name'];
+		
 		if (!empty($options['footer_template'])) {
 			$this->footer_template = $options['from_email'];
+		}
+
+		$this->template_dir = __DIR__ . '/templates/';
+		if (!empty($options['template_dir'])) {
+			$this->template_dir = $options['template_dir'];
 		}
 	}
 	
@@ -52,11 +59,12 @@ class Email {
 	
 	
 	public function sendTemplate($message, $template, $data) {
-		if (file_exists(__DIR__ . '/templates/' . $template . '.txt')) {
-			$content = file_get_contents(__DIR__ . '/templates/' . $template . '.txt');
+var_dump($this->template_dir . $template . '.txt');
+		if (file_exists($this->template_dir . $template . '.txt')) {
+			$content = file_get_contents($this->template_dir . $template . '.txt');
 			if ($content) {
-				if (file_exists(__DIR__ . '/templates/' . $this->footer_template . '.txt')) {
-					$content .= file_get_contents(__DIR__ . '/templates/' . $this->footer_template . '.txt');
+				if (file_exists($this->template_dir . $this->footer_template . '.txt')) {
+					$content .= file_get_contents($this->template_dir . $this->footer_template . '.txt');
 				}
 				$text = $this->_parseTemplate($content, $data);
 				$message['text'] = $text['body'];
@@ -65,11 +73,11 @@ class Email {
 				$message['text'] = null;
 			}
 		}
-		if (file_exists(__DIR__ . '/templates/' . $template . '.html')) {
-			$content = file_get_contents(__DIR__ . '/templates/' . $template . '.html');
+		if (file_exists($this->template_dir . $template . '.html')) {
+			$content = file_get_contents($this->template_dir . $template . '.html');
 			if ($content) {
-				if (file_exists(__DIR__ . '/templates/' . $this->footer_template . '.html')) {
-					$content .= file_get_contents(__DIR__ . '/templates/' . $this->footer_template . '.html');
+				if (file_exists($this->template_dir . $this->footer_template . '.html')) {
+					$content .= file_get_contents($this->template_dir . $this->footer_template . '.html');
 				}
 				$html = $this->_parseTemplate($content, $data, true);
 				$message['html'] = $html['body'];
