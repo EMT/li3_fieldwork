@@ -16,15 +16,8 @@ class Html extends \lithium\template\helper\Html {
         return $string;
     }
 
-    public function dataAttrs($data) {
-        foreach ($data as $key => &$val) {
-            if (is_array($val) || is_object($val)) {
-                $val = json_encode($val);
-            }
-            $val = 'data-' . $key . "='" . htmlspecialchars($val) . "'";
-        }
-
-        return implode(' ', $data);
+    public function pageData($data) {
+        return '<script>var pageData = ' . json_encode($data) . '</script>';
     }
 
 }
