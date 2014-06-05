@@ -8,11 +8,11 @@ use lithium\storage\Session;
 class Messages {
 
 	
-	private static $_messages = array();
+	private static $_messages = [];
 	private static $_rendered = false;
 	
 	
-	public static function add(array $message, array $options = array()) {
+	public static function add(array $message, array $options = []) {
 		static::$_messages[] = $message;
 	}
 	
@@ -29,6 +29,7 @@ class Messages {
 	
 	public static function clear() {
 		Session::delete('fw_messages');
+		static::$_messages[] = [];
 	}
 	
 	

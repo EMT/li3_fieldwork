@@ -5,6 +5,8 @@
 
 use li3_fieldwork\access\Access;
 use li3_fieldwork\email\Email;
+use li3_fieldwork\messages\Messages;
+use lithium\action\Dispatcher;
 
 Access::setBehaviours(array(
 	'default' => array(
@@ -26,5 +28,21 @@ Email::config([
 	'from_name' => '',
 	'from_email' => ''
 ]);
+
+Dispatcher::applyFilter('_callable', function($self, $params, $chain) {
+    $request = $params['request'];
+    $controller = $chain->next($self, $params, $chain);
+
+    $controller->applyFilter('redirect', function($self, $params, $chain) {   
+		// Save unrendered mesages
+		Messages::save();
+
+		$response = $chain->next($self, $params, $chain);
+	    return $response;
+	});
+    
+    return $controller;
+});
+
 
 ?>
