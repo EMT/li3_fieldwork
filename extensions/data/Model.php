@@ -57,14 +57,14 @@ class Model extends \lithium\data\Model {
     }
     
 
-    // public static function asArray($options) {
-    //     if ($data = self::all($options)) {
-    //         foreach ($data as $entity) {
-    //             $result[] = $entity->{$options['fields']};
-    //         }
-    //         return $result;
-    //     }
-    // }
+    public static function asArray($options) {
+        if ($data = self::all($options)) {
+            foreach ($data as $entity) {
+                $result[] = $entity->{$options['fields']};
+            }
+            return $result;
+        }
+    }
     
 
    /**
