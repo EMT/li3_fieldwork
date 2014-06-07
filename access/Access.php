@@ -75,16 +75,20 @@ class Access {
 	*
 	* Check that `$user` is an editor of `$article`, according to the `editor` rule.
 	*
-	* 	Acl::check($user, array('editor' => $article));
+	* 	Acl::check($user, ['editor' => $article]);
 	*
 	* Check that `$user` is either an editor or a viewer of `$article`, according to the either rule.
 	*
-	* 	Acl::check($user, array('editor' => $article, 'viewer' => $article));
+	* 	Acl::check($user, ['editor' => $article, 'viewer' => $article]);
 	*
 	* Check that `$user` is an owner of `$article` or an admin for `$section`, according 
 	* to either rule.
 	*
-	* 	Acl::check($user, array('owner' => $article, 'admin' => $section));
+	* 	Acl::check($user, ['owner' => $article, 'admin' => $section]);
+	*
+	* 	Check that `$user` is an owner of either `$article` or `$section`
+	*
+	* 	Acl::check($user, ['owner' => [$article, $section]]);
 	*
 	* Check that the `$user` is an editor of `$article`. If the check fails and the user is logged out,
 	* redirect to the /login page. If the check fails and the user is logged in, throw an exception.
@@ -120,41 +124,47 @@ class Access {
 					$role = $rsrc;
 				}
 
+				if (!is_array($rsrc)) {
+					$rsrc = [$rsrc];
+				}
+
 				if ($rule = static::getRules($role)) {
 					if (!is_array($rule)) {
 						$rule = [$rule];
 					}
 
-					foreach ($rule as $rl => $conds) {
-						if ($conds === true && $user->{self::$_opts['role_key']} === $rl) {
-							return true;
-						}
+					foreach ($rsrc as $resource) {
+						foreach ($rule as $rl => $conds) {
+							if ($conds === true && $user->{self::$_opts['role_key']} === $rl) {
+								return true;
+							}
 
-						if (is_array($conds)) {
-							$passed = true;
-							foreach ($conds as $user_field => $match) {
-								if (strpos($match, ':') === 0 && $rsrc) {
-									$fld = substr($match, 1);
-									$match = $rsrc->$fld;
+							if (is_array($conds)) {
+								$passed = true;
+								foreach ($conds as $user_field => $match) {
+									if (strpos($match, ':') === 0 && $resource) {
+										$fld = substr($match, 1);
+										$match = $resource->$fld;
+									}
+									if (!is_int($rl) && $user->{self::$_opts['role_key']} !== $rl) {
+										$passed = false;
+										break;
+									}
+									if (!$resource || $user->$user_field !== $match) {
+										$passed = false;
+										break;
+									}
 								}
-								if (!is_int($rl) && $user->{self::$_opts['role_key']} !== $rl) {
-									$passed = false;
-									break;
-								}
-								if (!$rsrc || $user->$user_field !== $match) {
-									$passed = false;
-									break;
+
+								if ($passed) {
+									return true;
 								}
 							}
 
-							if ($passed) {
-								return true;
-							}
-						}
-
-						if (is_callable($conds)) {
-							if ($conds($user, $rsrc)) {
-								return true;
+							if (is_callable($conds)) {
+								if ($conds($user, $resource)) {
+									return true;
+								}
 							}
 						}
 					}
