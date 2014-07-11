@@ -19,6 +19,16 @@ class Controller extends \lithium\action\Controller {
     //  The authenticated user
     public $auth;
 
+    //  Options
+    protected static $_options;
+
+    /**
+    * Set config options
+    */
+    public static function config($config) {
+        static::$_options = $config;
+    }
+
 
     protected function _init() {
         
@@ -35,7 +45,7 @@ class Controller extends \lithium\action\Controller {
         
         //  Secure json and csv formats to avoid making too much data public
         //  See the $formats public property in specific controllers for details
-        $whitelisted_formats = array('html', 'part'); // Formats accessible for any page
+        $whitelisted_formats = static::$_options['whitelisted_formats']; // Formats accessible for any page
         if ($this->request->type && !in_array($this->request->type, $whitelisted_formats)) {
             $action = $this->request->action;
             if (isset($this->request->admin) && $this->request->admin === 'admin') {
