@@ -36,6 +36,7 @@ class Controller extends \lithium\action\Controller {
         
         //  Secure forms
         $non_secured_actions = array('users/bounce');
+        $non_secured_actions = static::$_options['non_secured_actions'];
         if ($this->request->data && !RequestToken::check($this->request) 
         && !in_array($this->request->url, $non_secured_actions)) {
             //$host = $this->request->env('HTTP_HOST');
