@@ -14,6 +14,25 @@ class String extends \lithium\template\Helper {
 		return $string;
 	}
 
+    public function slugify($text) { 
+        // replace non-alphanumeric chars with -
+        $text = preg_replace('~[^\\pL\d]+~u', '-', $text);
+
+        // trim
+        $text = trim($text, '-');
+
+        // transliterate
+        $text = iconv('utf-8', 'us-ascii//TRANSLIT', $text);
+
+        // lowercase
+        $text = strtolower($text);
+
+        // remove unwanted characters
+        $text = preg_replace('~[^-\w]+~', '', $text);
+
+        return $text;
+    }
+
 }
 
 ?>
