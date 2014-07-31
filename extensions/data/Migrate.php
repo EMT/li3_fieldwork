@@ -43,7 +43,7 @@ class Migrate extends \lithium\data\Model {
 	    	if (pathinfo($dir . '/' . $filename, PATHINFO_EXTENSION) === 'sql') {
 		    	if ($sql = file_get_contents($dir . '/' . $filename)) {
 		    		list($number) = explode('.', $filename, 2);
-		    		if ($number > $last_migration) {
+		    		if ((int)$number > (int)$last_migration) {
 				    	$sql = explode(';', $sql);
 				    	$query_count = 0;
 			    		foreach ($sql as $query) {
