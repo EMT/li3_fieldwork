@@ -36,6 +36,11 @@ class Paginate extends \lithium\template\helper\Html {
 		return $html;
 	}
 
+	public function __get($name) {
+		$properties = P::getPagination();
+		return (isset($properties[$name])) ? $properties[$name] : null;
+	}
+
 }
 
 
