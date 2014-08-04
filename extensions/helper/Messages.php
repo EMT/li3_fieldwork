@@ -24,15 +24,18 @@ class Messages extends \lithium\template\Helper {
 	);
 
 	
-	public function render(array $options = array()) {
-		$messages = FieldworkMessages::get();
+	public function render(array $messages = [], array $options = []) {
+		if ($messages && !empty($messages[0]) && !is_array($messages[0])) {
+			$messages = [$messages];
+		}
+		$messages += FieldworkMessages::get();
 		FieldworkMessages::clear();
 
 		//	Group messages by type
-		$msgs = array();
+		$msgs = [];
 		foreach ($messages as $k => $m) {
 			if (!isset($msgs[$m[0]])) {
-				$msgs[$m[0]] = array();
+				$msgs[$m[0]] = [];
 			}
 			$msgs[$m[0]][$k] = $m;
 		}
@@ -50,6 +53,7 @@ class Messages extends \lithium\template\Helper {
 								array('msgs' => $ms), $scope);
 			}
 		}
+
 		return ($output) ? $this->_render(__METHOD__, 'fw_msgs_wrapper', array('groups' => $output), $scope) : '';
 	}
 	
