@@ -32,9 +32,10 @@ class Email {
 		$this->mandrill = new \Mandrill($options['mandrill_api_key']);
 		$this->from_email = $options['from_email'];
 		$this->from_name = $options['from_name'];
+		$this->reply_to = $options['reply_to'];
 		
 		if (!empty($options['footer_template'])) {
-			$this->footer_template = $options['from_email'];
+			$this->footer_template = $options['footer_template'];
 		}
 
 		$this->template_dir = __DIR__ . '/templates/';
@@ -89,6 +90,9 @@ class Email {
 		$message['tags'] = [$template];
 		$message['from_email'] = $this->from_email;
 		$message['from_name'] = $this->from_name;
+		$message['headers'] = [
+			'Reply-To' => $this->reply_to
+		];
 /* 	var_dump($message); exit(); */
 		return $this->send($message);
 	}
