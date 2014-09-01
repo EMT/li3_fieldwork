@@ -33,13 +33,15 @@ Dispatcher::applyFilter('_callable', function($self, $params, $chain) {
     $request = $params['request'];
     $controller = $chain->next($self, $params, $chain);
 
-    $controller->applyFilter('redirect', function($self, $params, $chain) {   
-		// Save unrendered mesages
-		Messages::save();
+    if (is_callable([$controller, 'applyFilter'])) {
+	    $controller->applyFilter('redirect', function($self, $params, $chain) {   
+			// Save unrendered mesages
+			Messages::save();
 
-		$response = $chain->next($self, $params, $chain);
-	    return $response;
-	});
+			$response = $chain->next($self, $params, $chain);
+		    return $response;
+		});
+	}
     
     return $controller;
 });
