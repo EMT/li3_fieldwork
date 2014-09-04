@@ -35,7 +35,7 @@ class Controller extends \lithium\action\Controller {
         parent::_init();
         
         //  Secure forms
-        $non_secured_actions = static::$_options['non_secured_actions'];
+        $non_secured_actions = (empty(static::$_options['non_secured_actions'])) ? [] : static::$_options['non_secured_actions'];
         if ($this->request->data && !RequestToken::check($this->request) 
         && !in_array($this->request->url, $non_secured_actions)) {
             //$host = $this->request->env('HTTP_HOST');
@@ -45,7 +45,7 @@ class Controller extends \lithium\action\Controller {
         
         //  Secure json and csv formats to avoid making too much data public
         //  See the $formats public property in specific controllers for details
-        $whitelisted_formats = static::$_options['whitelisted_formats']; // Formats accessible for any page
+        $whitelisted_formats = (empty(static::$_options['whitelisted_formats'])) ? [] : static::$_options['whitelisted_formats']; // Formats accessible for any page
         if ($this->request->type && !in_array($this->request->type, $whitelisted_formats)) {
             $action = $this->request->action;
             if (isset($this->request->admin) && $this->request->admin === 'admin') {
