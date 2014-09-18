@@ -33,11 +33,18 @@ class Controller extends \lithium\action\Controller {
     protected function _init() {
         
         parent::_init();
-        
+    
         //  Secure forms
+        $tokenTest = false;
+        if ($this->request->headers && !empty($this->request->headers['X-Csrf-Token'])) {
+            $tokenTest = RequestToken::check($this->request->headers['X-Csrf-Token']);
+        }
+        else if ($this->request->data) {
+            $tokenTest = RequestToken::check($this->request);
+        }
+
         $non_secured_actions = (empty(static::$_options['non_secured_actions'])) ? [] : static::$_options['non_secured_actions'];
-        if ($this->request->data && !RequestToken::check($this->request) 
-        && !in_array($this->request->url, $non_secured_actions)) {
+        if ($this->request->data && !$tokenTest && !in_array($this->request->url, $non_secured_actions)) {
             //$host = $this->request->env('HTTP_HOST');
             //Logger::error("Possible CSRF attack from host $host");
             throw new \Exception('Invalid form token.', 403);
