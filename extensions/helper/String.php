@@ -33,6 +33,16 @@ class String extends \lithium\template\Helper {
         return $text;
     }
 
+    public function listify($array) {
+        $last = array_pop($array);
+        
+        if (count($array)) {
+            return implode(', ', $array) . ' and ' . $last;
+        }
+
+        return $last;
+    }
+
 }
 
 ?>
