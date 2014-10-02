@@ -33,9 +33,11 @@ class Share extends \lithium\template\helper\Html {
     	$params = $params + array(
     		'url' => '',
     		'text' => '',
-    		'related' => ''
+    		'related' => '',
+            'hashtags' => []
     	);
     	$params['url'] = ($params['url']) ?: $this->currentPageUrl();
+        $params['hashtags'] = implode(',', $params['hashtags']);
     	return $this->getSocialUrl('twitter', $params);
     }
 
