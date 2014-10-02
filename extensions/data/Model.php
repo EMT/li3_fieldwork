@@ -58,6 +58,7 @@ class Model extends \lithium\data\Model {
     
 
     public static function asArray($options) {
+        $result = [];
         if ($data = self::all($options)) {
             foreach ($data as $entity) {
                 $result[] = $entity->{$options['fields']};
