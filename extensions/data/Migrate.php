@@ -44,14 +44,37 @@ class Migrate extends \lithium\data\Model {
 		    	if ($sql = file_get_contents($dir . '/' . $filename)) {
 		    		list($number) = explode('.', $filename, 2);
 		    		if ((int)$number > (int)$last_migration) {
-				    	$sql = explode(';', $sql);
 				    	$query_count = 0;
-			    		foreach ($sql as $query) {
-			    			if (trim($query)) {
-			    				Migrate::connection()->read($query);
-			    				$query_count ++;
-			    			}
-			    		}
+				    	$quote_types = ["'", '"'];
+				    	$delimiter = ';';
+						$quoted = [];
+						$queries = [];
+						$query_start = 0;
+						$char = null;
+
+						for ($i = 0, $len = strlen($sql); $i < $len; $i ++) {
+							$previous_char = $char;
+							$char = substr($sql, $i, 1);
+							if (in_array($char, $quote_types) && $previous_char !== '\\') {
+								if (empty($quoted[$char])) {
+									$quoted[$char] = true;
+								}
+								else {
+									unset($quoted[$char]);
+								}
+							}
+
+							if ($char === $delimiter && !count($quoted)) {
+								$query = substr($sql, $query_start, $i - $query_start + 1);
+								$query_start = $i + 1;
+
+								if (trim($query)) {
+				    				Migrate::connection()->read($query);
+				    				$query_count ++;
+				    			}
+							}
+						}
+
 			    		if ($query_count) {
 			    			echo 'Executing migration ' . $filename . '... ';
 				    		echo "success – " . $query_count . " queries executed\n";
@@ -82,6 +105,35 @@ class Migrate extends \lithium\data\Model {
     }
     
 	
+   /**
+    * Takes a query string and returns an array of queries split by the ; delimiter
+    */
+	private static function _splitQueries($string, $delimiter = ';') {
+		$quote_types = ["'", '"'];
+		$quoted = [];
+		$queries = [];
+		$query_start = 0;
+
+		for ($i = 0, $len = strlen($string); $i < $len; $i ++) {
+			$char = substr($string, $i, 1);
+
+			if (in_array($char, $quote_types)) {
+				if (empty($quoted[$char])) {
+					$quoted[$char] = true;
+				}
+				else {
+					unset($quoted[$char]);
+				}
+			}
+
+			if ($char === $delimiter && empty($quoted)) {
+				$queries[] = substr($string, $query_start, $i - 1);
+				$query_start = $i + 1;
+			}
+		}
+
+		return $queries;
+	}
 
 }
 
