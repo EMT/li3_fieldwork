@@ -41,7 +41,7 @@ class Migrate extends \lithium\data\Model {
     	$lm = false;
     	foreach ($files as $filename) {
 	    	if (pathinfo($dir . '/' . $filename, PATHINFO_EXTENSION) === 'sql') {
-		    	if ($sql = file_get_contents($dir . '/' . $filename)) {
+		    	if ($sql = trim(file_get_contents($dir . '/' . $filename))) {
 		    		list($number) = explode('.', $filename, 2);
 		    		if ((int)$number > (int)$last_migration) {
 				    	$query_count = 0;
@@ -52,28 +52,34 @@ class Migrate extends \lithium\data\Model {
 						$query_start = 0;
 						$char = null;
 
-						for ($i = 0, $len = strlen($sql); $i < $len; $i ++) {
-							$previous_char = $char;
-							$char = substr($sql, $i, 1);
-							if (in_array($char, $quote_types) && $previous_char !== '\\') {
-								if (empty($quoted[$char])) {
-									$quoted[$char] = true;
+						if (strpos($sql, $delimiter) !== false) {
+							for ($i = 0, $len = strlen($sql); $i < $len; $i ++) {
+								$previous_char = $char;
+								$char = substr($sql, $i, 1);
+								if (in_array($char, $quote_types) && $previous_char !== '\\') {
+									if (empty($quoted[$char])) {
+										$quoted[$char] = true;
+									}
+									else {
+										unset($quoted[$char]);
+									}
 								}
-								else {
-									unset($quoted[$char]);
+
+								if ($char === $delimiter && !count($quoted)) {
+									$query = substr($sql, $query_start, $i - $query_start + 1);
+									$query_start = $i + 1;
+
+									if (trim($query)) {
+					    				Migrate::connection()->read($query);
+					    				$query_count ++;
+					    			}
 								}
-							}
-
-							if ($char === $delimiter && !count($quoted)) {
-								$query = substr($sql, $query_start, $i - $query_start + 1);
-								$query_start = $i + 1;
-
-								if (trim($query)) {
-				    				Migrate::connection()->read($query);
-				    				$query_count ++;
-				    			}
 							}
 						}
+						else if ($sql) {
+		    				Migrate::connection()->read($sql);
+		    				$query_count ++;
+		    			}
 
 			    		if ($query_count) {
 			    			echo 'Executing migration ' . $filename . '... ';
