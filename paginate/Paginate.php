@@ -29,15 +29,22 @@ class Paginate {
 	public static function getPaginationData($collection, array $pagination, array $options = []) {
     	extract($pagination);
     	$next = false;
+
     	if (!empty($collection)) {
 	    	$model = $collection->model();
 		    $next = (count($collection) >= $limit) ? $model::all(
 		    		$options + ['page' => ($page * $limit) + 1, 'limit' => 1]) : false;
 	    	$next = ($next && count($next)) ? true : false;
 	    }
+
+	    $qs_data = [];
+	    if (isset($options['order'])) {
+	    	$qs_data['order'] = $options['order'];
+	    }
+
     	return [
     		'next' => $next,
-    	] + $pagination;
+    	] + $pagination + compact('qs_data');
     }
 
 }
