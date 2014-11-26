@@ -37,6 +37,16 @@ class Paginate extends \lithium\template\helper\Html {
 		return $html;
 	}
 
+	public function orderDirection($field_name = false) {
+		if ($this->qs_data && isset($this->qs_data['order'])) {
+			if ($field_name) {
+				return (isset($this->qs_data['order'][$field_name])) ? $this->qs_data['order'][$field_name] : false;
+			}
+
+			return array_values($this->qs_data['order'])[0];
+		}
+	}
+
 	public function __get($name) {
 		$properties = P::getPagination();
 		return (isset($properties[$name])) ? $properties[$name] : null;
