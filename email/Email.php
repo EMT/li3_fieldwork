@@ -33,15 +33,10 @@ class Email {
 		$this->from_email = $options['from_email'];
 		$this->from_name = $options['from_name'];
 		$this->reply_to = $options['reply_to'];
-		
-		if (!empty($options['footer_template'])) {
-			$this->footer_template = $options['footer_template'];
-		}
 
-		$this->template_dir = __DIR__ . '/templates/';
-		if (!empty($options['template_dir'])) {
-			$this->template_dir = $options['template_dir'];
-		}
+		$this->merge = (empty($options['merge'])) ? [] : $options['merge'];
+		$this->footer_template = (empty($options['footer_template'])) ? null : $options['footer_template'];
+		$this->template_dir = (empty($options['template_dir'])) ? __DIR__ . '/templates/' : $options['template_dir'];
 	}
 	
 	
@@ -60,6 +55,8 @@ class Email {
 	
 	
 	public function sendTemplate($message, $template, $data) {
+		$data = $data + $this->merge;
+
 		if (file_exists($this->template_dir . $template . '.txt')) {
 			$content = file_get_contents($this->template_dir . $template . '.txt');
 			if ($content) {
