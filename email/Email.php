@@ -35,7 +35,7 @@ class Email {
 		$this->reply_to = $options['reply_to'];
 
 		$this->merge = (empty($options['merge'])) ? [] : $options['merge'];
-		$this->footer_template = (empty($options['footer_template'])) ? null : $options['footer_template'];
+		$this->footer_template = (empty($options['footer_template'])) ? $this->footer_template : $options['footer_template'];
 		$this->template_dir = (empty($options['template_dir'])) ? __DIR__ . '/templates/' : $options['template_dir'];
 	}
 	
