@@ -33,10 +33,18 @@ class Email {
 		$this->from_email = $options['from_email'];
 		$this->from_name = $options['from_name'];
 		$this->reply_to = $options['reply_to'];
-
 		$this->merge = (empty($options['merge'])) ? [] : $options['merge'];
 		$this->footer_template = (empty($options['footer_template'])) ? $this->footer_template : $options['footer_template'];
-		$this->template_dir = (empty($options['template_dir'])) ? __DIR__ . '/templates/' : $options['template_dir'];
+	
+		$this->template_dir = __DIR__ . '/templates/';
+		if (!empty($options['template_dir'])) {
+			if (is_callable($options['template_dir'])) {
+				$this->template_dir = $options['template_dir']();
+			}
+			else {
+				$this->template_dir = $options['template_dir'];
+			}
+		}
 	}
 	
 	
@@ -70,6 +78,7 @@ class Email {
 				$message['text'] = null;
 			}
 		}
+
 		if (file_exists($this->template_dir . $template . '.html')) {
 			$content = file_get_contents($this->template_dir . $template . '.html');
 			if ($content) {
@@ -83,6 +92,11 @@ class Email {
 				$message['html'] = null;
 			}
 		}
+
+		if (!$text && !$html) {
+			throw new \Exception('No template found at: ' . $this->template_dir . $template . '.txt or ' . $this->template_dir . $template . '.html');
+		}
+
 		$message['subject'] = ($text) ? $text['subject'] : $html['subject'];
 		$message['tags'] = [$template];
 		$message['from_email'] = $this->from_email;
