@@ -104,7 +104,7 @@ class Email {
 		$message['headers'] = [
 			'Reply-To' => $this->reply_to
 		];
-/* 	var_dump($message); exit(); */
+ 	// var_dump($message); exit(); 
 		return $this->send($message);
 	}
 	
@@ -112,16 +112,31 @@ class Email {
 	private static function _parseTemplate($content, $data, $newlines = false) {
 		$search = array();
 		$replace = array();
+		
+		$i = 0;
 		foreach ($data as $key => $val) {
 			if (!is_array($val) && !is_object($val)) {
 				$search[] = '{{' . $key .'}}';
 				$replace[] = ($newlines) ? nl2br($val) : $val;
+
+				if ($key === 'message') {
+					$message_key = $i;
+				}
+
+				$i ++;
 			}
 		}
+
 		$content = trim($content);
 		list($subject, $body) = explode("\n", $content, 2);
+
+		if (!empty($message_key)) {
+			$replace[$message_key] = str_replace($search, $replace, $replace[$message_key]);
+		}
+
 		$subject = str_replace($search, $replace, trim($subject));
 		$body = str_replace($search, $replace, trim($body));
+
 		return compact('subject', 'body');
 	}
 
