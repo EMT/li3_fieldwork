@@ -45,6 +45,11 @@ class Email {
 				$this->template_dir = $options['template_dir'];
 			}
 		}
+
+		$this->subaccount = null;
+		if (!empty($options['subaccount'])) {
+			$this->subaccount = $options['subaccount'];
+		}
 	}
 	
 	
@@ -104,6 +109,7 @@ class Email {
 		$message['headers'] = [
 			'Reply-To' => $this->reply_to
 		];
+		$message['subaccount'] = $this->subaccount;
  	// var_dump($message); exit(); 
 		return $this->send($message);
 	}
