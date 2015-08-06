@@ -51,6 +51,11 @@ class Email {
 			$this->subaccount = $options['subaccount'];
 		}
 	}
+
+
+	public function setTemplateDir($dir) {
+		$this->template_dir = $dir;
+	}
 	
 	
 	public function send($message) {
