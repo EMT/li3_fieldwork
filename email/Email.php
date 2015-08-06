@@ -46,6 +46,11 @@ class Email {
 			}
 		}
 	}
+
+
+	public function setTemplateDir($dir) {
+		$this->template_dir = $dir;
+	}
 	
 	
 	public function send($message) {
